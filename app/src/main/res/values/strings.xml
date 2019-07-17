@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Nao_control</string>
+    <string name="textview">TextView</string>
+    <string name="speed">Speed</string>
+    <string name="pitch">Pitch</string>
+    <string name="say_it_again">say it again</string>
+</resources>
