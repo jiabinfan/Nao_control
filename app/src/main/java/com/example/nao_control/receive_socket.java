@@ -25,14 +25,10 @@ public class receive_socket extends AsyncTask<String, Void, String> {private Str
         while (true) {
             try {
 
-
                 ServerSocket serverSocket = new ServerSocket(port_num);
 
                 Socket socket = serverSocket.accept();
                 JSONObject jsonObject = new JSONObject();
-                //jsonObject.put("name", "tom");
-                //jsonObject.put("age", 20);
-                //jsonObject.put("msg", "Helloworld");
 
                 OutputStream outputStream = socket.getOutputStream();
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
