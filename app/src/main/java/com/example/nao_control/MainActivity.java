@@ -172,14 +172,15 @@ public class MainActivity extends AppCompatActivity {
                 Thevalue = jsonObject.getString(jsonObject.names().get(1).toString());
 
                 calendar my2_cal = new calendar();
-                JSONArray json_event = my2_cal.getcalendar(contex);
+                long start_time=0;
+                long end_time=0;
+                JSONArray json_event = my2_cal.getcalendar(contex,start_time,end_time);
             }
-        }
-         catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-
+    }
 
     public void saveCalender(View view) {
         Intent calendarIntent = new Intent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI);
@@ -202,59 +203,6 @@ public class MainActivity extends AppCompatActivity {
         c_end.set(2013,7,25,0,0); //Note that months start from 0 (January)
         String selection = "((dtstart >= "+c_start.getTimeInMillis()+") AND (dtend <= "+c_end.getTimeInMillis()+"))";
         txvResult.setText(selection);
-    }
-    public void get_cal_event(){
-        // 定义要查询的事件实例的日期范围
-        Calendar beginTime = Calendar.getInstance();
-        beginTime.set(2019, 7, 24, 8, 0);
-        long startMillis = beginTime.getTimeInMillis();
-        Calendar endTime = Calendar.getInstance();
-        endTime.set(2019, 7, 25, 8, 0);
-        long endMillis = endTime.getTimeInMillis();
-
-        Cursor cur = null;
-        ContentResolver cr = getContentResolver();
-
-        // 要在 Instances 表中查询的事件 ID
-        //String selection = Instances.EVENT_ID + " = ?";
-        String selection = "((" + Calendars.ACCOUNT_NAME + " = ?) AND ("
-                + Calendars.ACCOUNT_TYPE + " = ?) AND ("
-                + Calendars.OWNER_ACCOUNT + " = ?))";
-        String[] selectionArgs = new String[] {"jiabin@ualberta.ca", "com.google",
-                "jiabin@ualberta.ca"};
-
-        // 根据日期范围构造查询
-        Uri.Builder builder = Instances.CONTENT_URI.buildUpon();
-        ContentUris.appendId(builder, startMillis);
-        ContentUris.appendId(builder, endMillis);
-
-        // 提交查询
-        cur =  cr.query(builder.build(),
-                INSTANCE_PROJECTION,
-                selection,
-
-                selectionArgs,
-                null);
-
-        while (cur.moveToNext()) {
-            String title = null;
-            long eventID = 0;
-            long beginVal = 0;
-
-            // 读取各字段的值
-            eventID = cur.getLong(PROJECTION_ID_INDEX);
-            beginVal = cur.getLong(PROJECTION_BEGIN_INDEX);
-            title = cur.getString(PROJECTION_TITLE_INDEX);
-
-            // 利用这些数据完成一些操作
-            Log.i(DEBUG_TAG, "Event:  " + title);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(beginVal);
-            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            Log.i(DEBUG_TAG, "Date: " + formatter.format(calendar.getTime()));
-        }
-
-
     }
 }
 
