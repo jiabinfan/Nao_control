@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 Thevalue = jsonObject.getString(jsonObject.names().get(0).toString());
                 intent_text.putExtra(EXTRA_MESSAGE, Thevalue);
                 startActivity(intent_text);
-            } else if (jsonObject.names().get(3).toString().equals("calender") & jsonObject.getString(jsonObject.names().get(3).toString()).equals("add")) {
+            } else if (jsonObject.names().get(3).toString().equals("set_calender") & !jsonObject.getString(jsonObject.names().get(3).toString()).equals("")) {
                 Thevalue = jsonObject.getString(jsonObject.names().get(1).toString());
 
 
@@ -160,25 +160,27 @@ public class MainActivity extends AppCompatActivity {
                 long t_start = cal.getTime().getTime();
                 String title = "Ana sleep";
                 String description = "I want to sleep";
-                my_calendar.addCalendarEvent(this,title,description,t_start,1);
+                my_calendar.addCalendarEvent(this, title, description, t_start, 1);
 
                 //CalendarContentResolver my2_calender = CalendarContentResolver(contex);
 
                 //saveCalender(v);
                 //get_cal_event();
 
+
+            } else if (jsonObject.names().get(4).toString().equals("get_calender") & !jsonObject.getString(jsonObject.names().get(4).toString()).equals("")) {
+                Thevalue = jsonObject.getString(jsonObject.names().get(1).toString());
+
                 calendar my2_cal = new calendar();
                 JSONArray json_event = my2_cal.getcalendar(contex);
-
-
             }
-
-        } catch (Exception e) {
+        }
+         catch (Exception e) {
             e.printStackTrace();
         }
 
 
-    }
+
     public void saveCalender(View view) {
         Intent calendarIntent = new Intent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI);
         Calendar calendar = Calendar.getInstance();
