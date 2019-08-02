@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         txvResult = (TextView) findViewById(R.id.txvResult);
 
-        receive.execute();
+//        receive.execute();
     }
 
     public void getSpeechInput(View view) {
@@ -97,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent_voice = new Intent(this, text_to_voice.class);
         //Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
 
+        startActivity(intent_speech);
+        /*
         try {
 
             String json = receive.get_json();
@@ -133,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         }catch(Exception e){
             e.printStackTrace();
         }
-
+    */
     }
 
 }
