@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         txvResult = (TextView) findViewById(R.id.txvResult);
 
-        receive.execute();
+      //  receive.execute();
     }
 
     public void getSpeechInput(View view) {
