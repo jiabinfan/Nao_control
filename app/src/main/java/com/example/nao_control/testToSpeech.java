@@ -81,7 +81,8 @@ public class testToSpeech extends AppCompatActivity {
         mTTS.setPitch(pitch);
         mTTS.setSpeechRate(speed);
 
-        mTTS.speak(text,TextToSpeech.QUEUE_FLUSH, null);
+        mTTS.speak("this is a test one two three", TextToSpeech.QUEUE_FLUSH, null);
+        // mTTS.speak(text,TextToSpeech.QUEUE_FLUSH, null);
     }
 
     @Override
