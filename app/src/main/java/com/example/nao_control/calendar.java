@@ -38,7 +38,7 @@ public class calendar {
             long unix_end = Long.parseLong(eventCursor.getString(eventCursor.getColumnIndex("dtend")));
             startTime = timeStamp2Date(Long.parseLong(eventCursor.getString(eventCursor.getColumnIndex("dtstart"))));
             endTime = timeStamp2Date(Long.parseLong(eventCursor.getString(eventCursor.getColumnIndex("dtend"))));
-            if (input_end >= unix_start && input_end <=unix_end){
+            //if (input_start >= unix_start && input_end <=unix_end){
                 try {
                     json.put("eventTitle", eventTitle);
                     json.put("description", description);
@@ -49,7 +49,7 @@ public class calendar {
                     e.printStackTrace();
                 }
                 arr.put(json);}
-        }
+        //å}
         return arr;
     }
 

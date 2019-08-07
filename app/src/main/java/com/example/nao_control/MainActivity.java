@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,6 +16,7 @@ import java.util.Calendar;
 import android.graphics.Color;
 import android.icu.util.TimeZone;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.speech.RecognizerIntent;
@@ -41,22 +41,9 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private Context contex;
 
-
-
-    private static final String DEBUG_TAG = "MyActivity";
-    public static final String[] INSTANCE_PROJECTION = new String[]{
-            Instances.EVENT_ID,      // 0
-            Instances.BEGIN,         // 1
-            Instances.TITLE          // 2
-    };
-
-    // The indices for the projection array above.
-    private static final int PROJECTION_ID_INDEX = 0;
-    private static final int PROJECTION_BEGIN_INDEX = 1;
-    private static final int PROJECTION_TITLE_INDEX = 2;
-
-
     private TextView txvResult;
+    private TextView txvResult2;
+    private TextView txvResult3;
     private String sever_ip = "";
     receive_socket receive = new receive_socket();
     public static final String EXTRA_MESSAGE = "com.example.Nao_control.MESSAGE";
@@ -67,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
         contex = getApplicationContext();
         setContentView(R.layout.activity_main);
         txvResult = (TextView) findViewById(R.id.txvResult);
-
-        receive.execute();
+        txvResult2 = (TextView) findViewById(R.id.textView2);
+        txvResult3 = (TextView) findViewById(R.id.textView3);
+        receive.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void getSpeechInput(View view) {
@@ -76,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
 
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, 10);
@@ -133,48 +122,69 @@ public class MainActivity extends AppCompatActivity {
 
             //Toast.makeText(this, jsonObject.getString(jsonObject.names().get(0).toString()), Toast.LENGTH_SHORT).show();
 
-            if (jsonObject.names().get(2).toString().equals("url") & jsonObject.getString(jsonObject.names().get(2).toString()).substring(0, 4).equals("http")) {
+            if (jsonObject.names().get(0).toString().equals("url") && jsonObject.getString(jsonObject.names().get(0).toString()).substring(0, 4).equals("http")) {
                 Toast.makeText(this, "do not suuport", Toast.LENGTH_SHORT).show();
 
-                Thevalue = jsonObject.getString(jsonObject.names().get(2).toString());
+                Thevalue = jsonObject.getString(jsonObject.names().get(0).toString());
                 Uri uri = Uri.parse(Thevalue);
+
                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
-            } else if (jsonObject.names().get(1).toString().equals("speech") & !jsonObject.getString(jsonObject.names().get(1).toString()).equals("")) {
-                Toast.makeText(this, jsonObject.getString(jsonObject.names().get(1).toString()), Toast.LENGTH_SHORT).show();
 
-                Thevalue = jsonObject.getString(jsonObject.names().get(1).toString());
+            } if (jsonObject.names().get(2).toString().equals("speech") && !jsonObject.getString(jsonObject.names().get(2).toString()).equals("")) {
+                Toast.makeText(this, jsonObject.getString(jsonObject.names().get(2).toString()), Toast.LENGTH_SHORT).show();
+
+                Thevalue = jsonObject.getString(jsonObject.names().get(2).toString());
                 intent_speech.putExtra(EXTRA_MESSAGE, Thevalue);
                 startActivity(intent_speech);
-            } else if (jsonObject.names().get(0).toString().equals("text") & !jsonObject.getString(jsonObject.names().get(0).toString()).equals("")) {
+            } if (jsonObject.names().get(1).toString().equals("text") && !jsonObject.getString(jsonObject.names().get(1).toString()).equals("")) {
 
-                Thevalue = jsonObject.getString(jsonObject.names().get(0).toString());
+                Thevalue ="Anna say: "+ jsonObject.getString(jsonObject.names().get(1).toString());
                 intent_text.putExtra(EXTRA_MESSAGE, Thevalue);
-                startActivity(intent_text);
-            } else if (jsonObject.names().get(3).toString().equals("set_calender") & !jsonObject.getString(jsonObject.names().get(3).toString()).equals("")) {
-                Thevalue = jsonObject.getString(jsonObject.names().get(1).toString());
+                txvResult2.setText(Thevalue);
+                //startActivity(intent_text);
 
+            } if (jsonObject.names().get(4).toString().equals("set_calendar") && !jsonObject.getString(jsonObject.names().get(4).toString()).equals("")) {
+                String event = jsonObject.getString(jsonObject.names().get(4).toString());
+
+
+                String[] event_array = event.split("\\|");
 
                 CalendarReminderUtils my_calendar = new CalendarReminderUtils();
                 Calendar cal = Calendar.getInstance();
-                long t_start = cal.getTime().getTime();
-                String title = "Ana sleep";
+
+                //long t_start = cal.getTime().getTime(); // Long.parseLong("String")
+                //long t_end = cal.getTime().getTime()+10*60; //Long.parseLong("String")
+                txvResult3.setText(event_array[0]);
+                long t_start =  Long.parseLong(event_array[0]);
+                long t_end =  Long.parseLong(event_array[1]);
+
+                String title = "Ana sleep"; //
                 String description = "I want to sleep";
-                my_calendar.addCalendarEvent(this, title, description, t_start, 1);
+                my_calendar.addCalendarEvent(this, title, description, t_start, t_end, t_start+10*60, 1);
 
                 //CalendarContentResolver my2_calender = CalendarContentResolver(contex);
 
                 //saveCalender(v);
                 //get_cal_event();
 
+            }
+            if (jsonObject.names().get(3).toString().equals("get_calendar") && !jsonObject.getString(jsonObject.names().get(3).toString()).equals("")) {
 
-            } else if (jsonObject.names().get(4).toString().equals("get_calender") & !jsonObject.getString(jsonObject.names().get(4).toString()).equals("")) {
-                Thevalue = jsonObject.getString(jsonObject.names().get(1).toString());
+                Thevalue = jsonObject.getString(jsonObject.names().get(3).toString());
 
                 calendar my2_cal = new calendar();
                 long start_time=0;
                 long end_time=0;
-                JSONArray json_event = my2_cal.getcalendar(contex,start_time,end_time);
+
+                JSONArray json_event = my2_cal.getcalendar(this,start_time,end_time);
+
+
+                user_Sorket socket2 = new user_Sorket();
+                socket2.setJsonArray(json_event);
+                //socket.setIp(this.sever_ip);
+                socket2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
             }
         } catch (Exception e) {
             e.printStackTrace();

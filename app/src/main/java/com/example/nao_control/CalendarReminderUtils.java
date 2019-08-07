@@ -1,5 +1,6 @@
 package com.example.nao_control;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -96,11 +97,35 @@ public class CalendarReminderUtils {
     /**
      * 添加日历事件
      */
-    public static void addCalendarEvent(Context context, String title, String description, long reminderTime, int previousDate) {
+    private int get_CalendarID(Context context){
+        int calenderId=-1;
+        String calenderEmaillAddress="xxx@gmail.com";
+        String[] projection = new String[]{
+                CalendarContract.Calendars._ID,
+                CalendarContract.Calendars.ACCOUNT_NAME};
+        ContentResolver cr = context.getContentResolver();
+        Cursor cursor = cr.query(Uri.parse("content://com.android.calendar/calendars"), projection,
+                CalendarContract.Calendars.ACCOUNT_NAME + "=? and (" +
+                        CalendarContract.Calendars.NAME + "=? or " +
+                        CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + "=?)",
+                new String[]{calenderEmaillAddress, calenderEmaillAddress,
+                        calenderEmaillAddress}, null);
+
+        if (cursor.moveToFirst()) {
+
+            if (cursor.getString(1).equals(calenderEmaillAddress))
+                calenderId=cursor.getInt(0); //youre calender id to be insered in above your code
+
+
+        }
+        return calenderId;
+    }
+    public void addCalendarEvent(Context context, String title, String description,long start_t, long end_t, long reminderTime, int previousDate) {
         if (context == null) {
             return;
         }
         int calId = checkAndAddCalendarAccount(context); //获取日历账户的id
+        //int calId = get_CalendarID(context);
         if (calId < 0) { //获取账户id失败直接返回，添加日历事件失败
             return;
         }
@@ -118,7 +143,7 @@ public class CalendarReminderUtils {
         event.put(CalendarContract.Events.DTSTART, start);
         event.put(CalendarContract.Events.DTEND, end);
         event.put(CalendarContract.Events.HAS_ALARM, 1);//设置有闹钟提醒
-        event.put(CalendarContract.Events.EVENT_TIMEZONE, "Asia/Shanghai");//这个是时区，必须有
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());//这个是时区，必须有 "Asian/Shanghai"
         Uri newEvent = context.getContentResolver().insert(Uri.parse(CALENDER_EVENT_URL), event); //添加事件
         if (newEvent == null) { //添加日历事件失败直接返回
             return;

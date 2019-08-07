@@ -20,6 +20,7 @@ public class testToSpeech extends AppCompatActivity {
     private SeekBar mSeekBarSpeed;
     private Button mButtonSpeak;
     private TextView mTextView;
+    private String Mmessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +28,9 @@ public class testToSpeech extends AppCompatActivity {
 
         Intent intent = getIntent();
         TextView textView = findViewById(R.id.textView);
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        final String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         textView.setText(message);
-
+        Mmessage = message;
         mButtonSpeak = findViewById(R.id.button_speak);
 
 
@@ -46,40 +47,10 @@ public class testToSpeech extends AppCompatActivity {
                             Log.d("TTS", "Initilization Failed!");
                         }
 
-                        mTTS.speak("what the hack", TextToSpeech.QUEUE_FLUSH, null);
+                        mTTS.speak(Mmessage, TextToSpeech.QUEUE_FLUSH, null);
                     }
                 });
 
-        /*
-        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    int result = mTTS.setLanguage(Locale.ENGLISH);
-                    if (result == TextToSpeech.LANG_MISSING_DATA
-                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("TTS", "Language not supported");
-                    } else {
-                        mButtonSpeak.setEnabled(true);
-                    }
-                } else {
-                    Log.e("TTS", "Initialization failed");
-                }
-            }
-        });
-        */
-        /*
-        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-                if (i == TextToSpeech.SUCCESS){
-                    int result = mTTS.setLanguage(Locale.ENGLISH);
-                    mButtonSpeak.setEnabled(true);
-                }
-
-            }
-        });
-        */
         mButtonSpeak.setEnabled(true);
         mTTS.setLanguage(Locale.US);
         mSeekBarPitch = findViewById(R.id.seek_bar_pitch);
@@ -95,7 +66,7 @@ public class testToSpeech extends AppCompatActivity {
         mTTS.setPitch(pitch);
         mTTS.setSpeechRate(speed);
 
-        mTTS.speak("what the hack",TextToSpeech.QUEUE_FLUSH, null);
+        //mTTS.speak(message,TextToSpeech.QUEUE_FLUSH, null);
 
         mButtonSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +74,7 @@ public class testToSpeech extends AppCompatActivity {
                 speak();
             }
         });
-        mTTS.speak("I want to sleep",TextToSpeech.QUEUE_FLUSH, null);
+        //mTTS.speak(Mmessage,TextToSpeech.QUEUE_FLUSH, null);
 
     }
     private void speak() {
@@ -118,7 +89,7 @@ public class testToSpeech extends AppCompatActivity {
         mTTS.setSpeechRate(speed);
 
 
-        mTTS.speak("I want to sleep",TextToSpeech.QUEUE_FLUSH, null);
+        mTTS.speak(Mmessage,TextToSpeech.QUEUE_FLUSH, null);
     }
 
     @Override
