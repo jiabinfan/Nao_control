@@ -150,14 +150,14 @@ public class MainActivity extends AppCompatActivity {
                 CalendarReminderUtils my_calendar = new CalendarReminderUtils();
                 Calendar cal = Calendar.getInstance();
 
-                long t_start = cal.getTime().getTime(); // Long.parseLong("String")
-                long t_end = cal.getTime().getTime()+10*60; //Long.parseLong("String")
+                //long t_start = cal.getTime().getTime(); // Long.parseLong("String")
+                //long t_end = cal.getTime().getTime()+10*60; //Long.parseLong("String")
                 txvResult3.setText(event_array[0]);
-                //long t_start =  Long.parseLong(event_array[0]);
-                //long t_end =  Long.parseLong(event_array[1]);
+                long t_start =  Long.parseLong(event_array[0]);
+                long t_end =  Long.parseLong(event_array[1]);
 
-                String title = "Ana sleep"; //
-                String description = "I want to sleep";
+                String title = event_array[2]; //
+                String description = event_array[3];
                 CalendarReminderUtils.addCalendarEvent(this, title, description, t_start, t_end, t_start+10*60, 1);
                 //CalendarUtils the_cal = new CalendarUtils();
 
@@ -184,6 +184,12 @@ public class MainActivity extends AppCompatActivity {
                 socket2.setJsonArray(json_event);
                 //socket.setIp(this.sever_ip);
                 socket2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+            }
+            if (jsonObject.names().get(5).toString().equals("read_book") && !jsonObject.getString(jsonObject.names().get(5).toString()).equals("")){
+
+                Thevalue = jsonObject.getString(jsonObject.names().get(5).toString());  // paragraph to be read
+                
 
             }
         } catch (Exception e) {

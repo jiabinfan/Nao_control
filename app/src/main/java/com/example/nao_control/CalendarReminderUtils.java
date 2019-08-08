@@ -140,8 +140,8 @@ public class CalendarReminderUtils {
         event.put("title", title);
         event.put("description", description);
         event.put("calendar_id", calId); //插入账户的id
-        event.put(CalendarContract.Events.DTSTART, start);
-        event.put(CalendarContract.Events.DTEND, end);
+        event.put(CalendarContract.Events.DTSTART, start_t);
+        event.put(CalendarContract.Events.DTEND, end_t);
         event.put(CalendarContract.Events.HAS_ALARM, 1);//设置有闹钟提醒
         event.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());//这个是时区，必须有 "Asian/Shanghai"
         Uri newEvent = context.getContentResolver().insert(Uri.parse(CALENDER_EVENT_URL), event); //添加事件
