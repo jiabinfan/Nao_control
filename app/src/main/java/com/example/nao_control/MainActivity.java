@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
-
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, 10);
         } else {
@@ -75,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //helwo
         ArrayList<String> result;
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -85,10 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     txvResult3.setText(result.get(0));
+
                     user_Sorket socket = new user_Sorket();
                     socket.setMessage(result.get(0));
-                    socket.setIp(this.sever_ip);
-                    socket.execute();
+                    //socket.setIp(this.sever_ip);
+                    socket.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 break;
         }
@@ -151,15 +150,18 @@ public class MainActivity extends AppCompatActivity {
                 CalendarReminderUtils my_calendar = new CalendarReminderUtils();
                 Calendar cal = Calendar.getInstance();
 
-                //long t_start = cal.getTime().getTime(); // Long.parseLong("String")
-                //long t_end = cal.getTime().getTime()+10*60; //Long.parseLong("String")
+                long t_start = cal.getTime().getTime(); // Long.parseLong("String")
+                long t_end = cal.getTime().getTime()+10*60; //Long.parseLong("String")
                 txvResult3.setText(event_array[0]);
-                long t_start =  Long.parseLong(event_array[0]);
-                long t_end =  Long.parseLong(event_array[1]);
+                //long t_start =  Long.parseLong(event_array[0]);
+                //long t_end =  Long.parseLong(event_array[1]);
 
                 String title = "Ana sleep"; //
                 String description = "I want to sleep";
-                my_calendar.addCalendarEvent(this, title, description, t_start, t_end, t_start+10*60, 1);
+                CalendarReminderUtils.addCalendarEvent(this, title, description, t_start, t_end, t_start+10*60, 1);
+                //CalendarUtils the_cal = new CalendarUtils();
+
+                //the_cal.addCalendarEvent(contex,title,description,t_start+10*60,1);
 
                 //CalendarContentResolver my2_calender = CalendarContentResolver(contex);
 
