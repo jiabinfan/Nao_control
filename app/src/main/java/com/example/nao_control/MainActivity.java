@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        //helwo
         ArrayList<String> result;
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    txvResult.setText(result.get(0));
+                    txvResult3.setText(result.get(0));
                     user_Sorket socket = new user_Sorket();
                     socket.setMessage(result.get(0));
                     socket.setIp(this.sever_ip);
