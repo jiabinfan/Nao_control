@@ -26,6 +26,7 @@ public class CalendarReminderUtils {
     /**
      * 检查是否已经添加了日历账户，如果没有添加先添加一个日历账户再查询
      * 获取账户成功返回账户id，否则返回-1
+     * bu cheng gong jiu cheng ren
      */
     private static int checkAndAddCalendarAccount(Context context) {
         int oldId = checkCalendarAccount(context);
