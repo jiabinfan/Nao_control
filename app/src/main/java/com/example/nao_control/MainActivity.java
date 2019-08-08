@@ -120,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
             jsonObject = new JSONObject(json);
             txvResult.setText(json);
 
-            //Toast.makeText(this, jsonObject.getString(jsonObject.names().get(0).toString()), Toast.LENGTH_SHORT).show();
-
             if (jsonObject.names().get(0).toString().equals("url") && jsonObject.getString(jsonObject.names().get(0).toString()).substring(0, 4).equals("http")) {
                 Toast.makeText(this, "do not suuport", Toast.LENGTH_SHORT).show();
 
