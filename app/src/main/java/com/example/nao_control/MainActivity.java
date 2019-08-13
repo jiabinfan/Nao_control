@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -40,7 +41,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private Context contex;
-
+    private TextToSpeech mTTS;
     private TextView txvResult;
     private TextView txvResult2;
     private TextView txvResult3;
@@ -57,6 +58,21 @@ public class MainActivity extends AppCompatActivity {
         txvResult2 = (TextView) findViewById(R.id.textView2);
         txvResult3 = (TextView) findViewById(R.id.textView3);
         receive.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                if (i != TextToSpeech.ERROR) {
+                    //mTTS.setLanguage(Locale.US);
+                    if (i == TextToSpeech.LANG_MISSING_DATA || i == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.d("TTS", "This Language is not supported");
+                    }
+                } else {
+                    Log.d("TTS", "Initilization Failed!");
+                }
+
+
+            }
+        });
     }
 
     public void getSpeechInput(View view) {
@@ -119,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             jsonObject = new JSONObject(json);
             txvResult.setText(json);
 
-            if (jsonObject.names().get(0).toString().equals("url") && jsonObject.getString(jsonObject.names().get(0).toString()).substring(0, 4).equals("http")) {
+            if (!jsonObject.get("action").equals("")){//toString().equals("url") && jsonObject.getString(jsonObject.names().get(0).toString()).substring(0, 4).equals("http")) {
                 Toast.makeText(this, "do not suuport", Toast.LENGTH_SHORT).show();
 
                 Thevalue = jsonObject.getString(jsonObject.names().get(0).toString());
@@ -128,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
 
-            } if (jsonObject.names().get(2).toString().equals("speech") && !jsonObject.getString(jsonObject.names().get(2).toString()).equals("")) {
+            } if (!jsonObject.get("response").equals("")){//.names().get(2).toString().equals("speech") && !jsonObject.getString(jsonObject.names().get(2).toString()).equals("")) {
                 Toast.makeText(this, jsonObject.getString(jsonObject.names().get(2).toString()), Toast.LENGTH_SHORT).show();
 
                 Thevalue = jsonObject.getString(jsonObject.names().get(2).toString());
@@ -179,25 +195,41 @@ public class MainActivity extends AppCompatActivity {
 
                 JSONArray json_event = my2_cal.getcalendar(this,start_time,end_time);
 
-
                 user_Sorket socket2 = new user_Sorket();
                 socket2.setJsonArray(json_event);
                 //socket.setIp(this.sever_ip);
                 socket2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+
             }
-            if (jsonObject.names().get(5).toString().equals("read_book") && !jsonObject.getString(jsonObject.names().get(5).toString()).equals("")){
+            if (jsonObject.names().get(0).toString().equals("read_book") && !jsonObject.getString(jsonObject.names().get(5).toString()).equals("")){
 
                 Thevalue = jsonObject.getString(jsonObject.names().get(5).toString());  // paragraph to be read
-                
+
+
+
+                mTTS.setLanguage(Locale.CANADA);
+                read_books(Thevalue);
 
             }
+            if (jsonObject.names().get(6).toString().equals("stop") && !jsonObject.getString(jsonObject.names().get(5).toString()).equals("stop reading")){
+
+                if (mTTS != null){
+                    mTTS.stop();
+                    mTTS.shutdown();
+                }
+                super.onDestroy();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+    private void read_books(String book_text){
 
+        mTTS.speak(book_text, TextToSpeech.QUEUE_FLUSH, null);
+    }
     public void saveCalender(View view) {
         Intent calendarIntent = new Intent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI);
         Calendar calendar = Calendar.getInstance();
