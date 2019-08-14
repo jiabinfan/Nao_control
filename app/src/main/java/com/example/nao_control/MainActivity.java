@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 //get_cal_event();
 
             }
-            if (jsonObject.get("get_calendar").equals("Sherlock")//.names().get(3).toString().equals("get_calendar") && !jsonObject.getString(jsonObject.names().get(3).toString()).equals("")) {
+            if (jsonObject.get("get_calendar").equals("Sherlock"){//.names().get(3).toString().equals("get_calendar") && !jsonObject.getString(jsonObject.names().get(3).toString()).equals("")) {
 
                 Thevalue = jsonObject.getString(jsonObject.names().get(3).toString());
 
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onDestroy();
             }
 
-        } catch (Exception e) {
+        } catch(Exception e){
             e.printStackTrace();
         }
 
