@@ -133,10 +133,10 @@ public class MainActivity extends AppCompatActivity {
 
             String json = receive.get_json();
             jsonObject = new JSONObject(json);
-            txvResult.setText(json);
+            txvResult.setText(jsonObject.get("action").toString());
 
-            if (!jsonObject.get("action").equals("")){//toString().equals("url") && jsonObject.getString(jsonObject.names().get(0).toString()).substring(0, 4).equals("http")) {
-                Toast.makeText(this, "do not suuport", Toast.LENGTH_SHORT).show();
+            if (jsonObject.get("action").equals("url")){//toString().equals("url") && jsonObject.getString(jsonObject.names().get(0).toString()).substring(0, 4).equals("http")) {
+                //Toast.makeText(this, "do not suuport", Toast.LENGTH_SHORT).show();
 
                 Thevalue = jsonObject.getString(jsonObject.names().get(0).toString());
                 Uri uri = Uri.parse(Thevalue);
@@ -145,35 +145,51 @@ public class MainActivity extends AppCompatActivity {
 
 
             } if (!jsonObject.get("response").equals("")){//.names().get(2).toString().equals("speech") && !jsonObject.getString(jsonObject.names().get(2).toString()).equals("")) {
-                Toast.makeText(this, jsonObject.getString(jsonObject.names().get(2).toString()), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "are you OK", Toast.LENGTH_SHORT).show();
 
-                Thevalue = jsonObject.getString(jsonObject.names().get(2).toString());
+                Thevalue = jsonObject.get("response").toString();
                 intent_speech.putExtra(EXTRA_MESSAGE, Thevalue);
                 startActivity(intent_speech);
-            } if (jsonObject.names().get(1).toString().equals("text") && !jsonObject.getString(jsonObject.names().get(1).toString()).equals("")) {
+
+            }
+            /*
+            if (jsonObject.get("action").equals("intent")){//names().get(1).toString().equals("text") && !jsonObject.getString(jsonObject.names().get(1).toString()).equals("")) {
 
                 Thevalue ="Anna say: "+ jsonObject.getString(jsonObject.names().get(1).toString());
                 intent_text.putExtra(EXTRA_MESSAGE, Thevalue);
                 txvResult2.setText(Thevalue);
                 //startActivity(intent_text);
 
-            } if (jsonObject.names().get(4).toString().equals("set_calendar") && !jsonObject.getString(jsonObject.names().get(4).toString()).equals("")) {
-                String event = jsonObject.getString(jsonObject.names().get(4).toString());
+            }*/ if (//jsonObject.names().get(4).toString().equals("set_calendar") && !jsonObject.getString(jsonObject.names().get(4).toString()).equals("")) {
+                    jsonObject.get("action").equals("reminder")){
 
 
-                String[] event_array = event.split("\\|");
+                //String event = jsonObject.getString(jsonObject.names().get(4).toString());
+
+
+                //String[] event_array = event.split("\\|");
 
                 CalendarReminderUtils my_calendar = new CalendarReminderUtils();
                 Calendar cal = Calendar.getInstance();
 
                 //long t_start = cal.getTime().getTime(); // Long.parseLong("String")
-                //long t_end = cal.getTime().getTime()+10*60; //Long.parseLong("String")
-                txvResult3.setText(event_array[0]);
-                long t_start =  Long.parseLong(event_array[0]);
-                long t_end =  Long.parseLong(event_array[1]);
+                //long t_end = cal.getTime().getTime()+10*60*60; //Long.parseLong("String")
+                //txvResult3.setText(event_array[0]);
+                //long t_start =  Long.parseLong(event_array[0]);
+                //long t_end =  Long.parseLong(event_array[1]);
 
-                String title = event_array[2]; //
-                String description = event_array[3];
+                //String title = event_array[2]; //
+                //String description = event_array[3];
+
+
+                long t_start = ((Number) jsonObject.get("start_date")).longValue();//.toString();
+                long t_end = ((Number) jsonObject.get("end_date")).longValue();//.toString();
+                //long t_start = Long.parseLong(start_y);
+                //long t_end = Long.parseLong(start_x);
+
+                String title = "what is the issue?";
+                String description = "I want to sleep";
+
                 CalendarReminderUtils.addCalendarEvent(this, title, description, t_start, t_end, t_start+10*60, 1);
                 //CalendarUtils the_cal = new CalendarUtils();
 
@@ -185,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 //get_cal_event();
 
             }
-            if (jsonObject.names().get(3).toString().equals("get_calendar") && !jsonObject.getString(jsonObject.names().get(3).toString()).equals("")) {
+            if (jsonObject.get("get_calendar").equals("Sherlock")//.names().get(3).toString().equals("get_calendar") && !jsonObject.getString(jsonObject.names().get(3).toString()).equals("")) {
 
                 Thevalue = jsonObject.getString(jsonObject.names().get(3).toString());
 

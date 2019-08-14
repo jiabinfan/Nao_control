@@ -3,6 +3,7 @@ package com.example.nao_control;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class user_Sorket extends AsyncTask<String, Void, String> {
-    private String IP_add = "192.168.0.102";
+    private String IP_add = "192.168.0.100";
     int port_num = 9559;
     private Socket client;
     PrintWriter printWriter;
@@ -30,7 +31,6 @@ public class user_Sorket extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params){
         try{
-
 
             if (send_j_a.equals("send_j_a")){
                 send_j_a();
@@ -44,6 +44,7 @@ public class user_Sorket extends AsyncTask<String, Void, String> {
             else{
                 client = new Socket(IP_add, port_num);
 
+                //BufferedOutputStream cmdOutput = new BufferedOutputStream(client.getOutputStream(), port_num);
 
                 OutputStream out = client.getOutputStream();
                 PrintWriter output = new PrintWriter(out);
@@ -51,7 +52,9 @@ public class user_Sorket extends AsyncTask<String, Void, String> {
 
                 output.close();
                 out.close();
+
                 client.close();
+
             }
 
 
