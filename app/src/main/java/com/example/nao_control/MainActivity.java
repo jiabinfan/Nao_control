@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 //get_cal_event();
 
             }
-            if (jsonObject.get("get_calendar").equals("Sherlock")){//.names().get(3).toString().equals("get_calendar") && !jsonObject.getString(jsonObject.names().get(3).toString()).equals("")) {
+            if (jsonObject.get("action").equals("get_calendar")){//.names().get(3).toString().equals("get_calendar") && !jsonObject.getString(jsonObject.names().get(3).toString()).equals("")) {
 
                 Thevalue = jsonObject.getString(jsonObject.names().get(3).toString());
 
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-            if (jsonObject.names().get(0).toString().equals("read_book") && !jsonObject.getString(jsonObject.names().get(5).toString()).equals("")){
+            if (jsonObject.get("action").equals("read_book")){//.names().get(0).toString().equals("read_book") && !jsonObject.getString(jsonObject.names().get(5).toString()).equals("")){
 
                 Thevalue = jsonObject.getString(jsonObject.names().get(5).toString());  // paragraph to be read
 
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                 read_books(Thevalue);
 
             }
-            if (jsonObject.names().get(6).toString().equals("stop") && !jsonObject.getString(jsonObject.names().get(5).toString()).equals("stop reading")){
+            if (jsonObject.get("action").equals("stop")){//.names().get(6).toString().equals("stop") && !jsonObject.getString(jsonObject.names().get(5).toString()).equals("stop reading")){
 
                 if (mTTS != null){
                     mTTS.stop();
